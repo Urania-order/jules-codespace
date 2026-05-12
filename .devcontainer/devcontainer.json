@@ -1,6 +1,7 @@
 {
-  "name": "Jules AI Environment",
+  "name": "Jules Stable Dev Environment",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
-  "postCreateCommand": "node -v && npm -v && npm install -g @google/jules",
+  "postCreateCommand": "echo 'container started' && node -v && npm -v && npm install -g @google/jules || true",
+  "postStartCommand": "echo 'ready'",
   "remoteUser": "vscode"
 }
