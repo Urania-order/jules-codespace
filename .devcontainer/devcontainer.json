@@ -1,15 +1,6 @@
 {
   "name": "Jules AI Dev Environment",
-  "build": {
-    "dockerfile": "../Dockerfile"
-  },
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint"
-      ]
-    }
-  },
-  "postCreateCommand": "node -v && npm -v && jules || true",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  "postCreateCommand": "npm install -g @google/jules && node -v && jules || true",
   "remoteUser": "vscode"
 }
