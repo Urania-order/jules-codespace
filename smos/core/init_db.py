@@ -3,8 +3,18 @@ from smos.models.models import User, Workspace, Timeline, MemoryNode, Relation, 
 from smos.models.goals import Goal, Task
 from smos.models.consensus import Proposal, Vote
 from smos.models.discussion import Comment, Reaction
+from smos.models.cognitive import CognitiveSession, Thought
+from smos.models.entities import DigitalTwin, Cosmonaut
+from smos.models.experience import Recipe, Reconstruction, CausalRelation
+from sqlalchemy import text
 
 def init_db():
+    # Ensure vector extension is enabled
+    with engine.connect() as conn:
+        conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector;"))
+        conn.commit()
+
+    # Make sure all models are imported before calling create_all
     Base.metadata.create_all(bind=engine)
     print("Database tables created.")
 

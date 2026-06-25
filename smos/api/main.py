@@ -5,6 +5,10 @@ from smos.models.models import Event as DBEvent, User, Workspace, MemoryNode
 from smos.services.embedding_service import embedding_service
 from smos.services.orchestrator import AgentOrchestrator
 from smos.services.permissions import PermissionService
+from smos.services.timeline_service import TimelineService
+from smos.services.cognitive_service import CognitiveService
+from smos.services.recipe_service import RecipeService
+from smos.services.twin_service import TwinService
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 from datetime import datetime
@@ -52,6 +56,26 @@ def create_event(event: EventCreate, db: Session = Depends(get_db)):
 @app.get("/events")
 def get_events(db: Session = Depends(get_db)):
     return db.query(DBEvent).all()
+
+@app.post("/timeline/fork")
+def fork_timeline(parent_id: int, description: str, db: Session = Depends(get_db)):
+    svc = TimelineService(db)
+    return svc.fork_timeline(parent_id, description)
+
+@app.post("/cognitive/session")
+def start_session(workspace_id: Optional[int], topic: str, timeline_id: int, participants: List[int], db: Session = Depends(get_db)):
+    svc = CognitiveService(db)
+    return svc.create_session(workspace_id, topic, timeline_id, participants)
+
+@app.post("/recipe")
+def create_recipe(title: str, author_id: int, steps: List[str], problem_type: str, db: Session = Depends(get_db)):
+    svc = RecipeService(db)
+    return svc.create_recipe(title, author_id, steps, problem_type)
+
+@app.post("/twin")
+def create_twin(owner_id: int, goals: List[str], preferences: Dict[str, Any], db: Session = Depends(get_db)):
+    svc = TwinService(db)
+    return svc.create_twin(owner_id, goals, preferences)
 
 @app.get("/memory/search")
 def search_memory(q: str, user_id: int, limit: int = 20, db: Session = Depends(get_db)):

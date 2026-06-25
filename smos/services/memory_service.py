@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from smos.models.models import Event, MemoryNode, Relation, MemoryType, RelationType, Timeline, TimelineType
 from smos.services.embedding_service import embedding_service
+from smos.core.security import secret_filter
 import json
 
 class MemoryService:
@@ -10,6 +11,9 @@ class MemoryService:
     def process_event(self, event: Event):
         # Basic logic: transform clipboard/input events into MemoryNodes
         content_str = json.dumps(event.content)
+
+        # Apply secret filtering
+        content_str = secret_filter.filter(content_str)
 
         # Check if we have a default REAL timeline
         timeline = self.db.query(Timeline).filter(Timeline.type == TimelineType.REAL).first()

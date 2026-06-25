@@ -1,6 +1,7 @@
 from mcp.server.fastmcp import FastMCP
 from smos.core.database import SessionLocal
 from smos.services.integrations import JulesService
+from typing import List
 
 mcp = FastMCP("smos")
 
@@ -56,3 +57,35 @@ def get_active_goals(user_id: int) -> str:
     goals = engine.identify_active_projects(user_id)
     db.close()
     return f"Active goals: {[g.title for g in goals]}"
+
+@mcp.tool()
+def compare_timelines(id_a: int, id_b: int) -> str:
+    """Compare two timelines and find differences"""
+    db = SessionLocal()
+    from smos.services.timeline_service import TimelineService
+    svc = TimelineService(db)
+    result = svc.compare_timelines(id_a, id_b)
+    db.close()
+    return f"Timeline Comparison: {result}"
+
+@mcp.tool()
+def create_recipe(title: str, author_id: int, steps: List[str], problem_type: str) -> str:
+    """Create a new successful recipe for solving a problem"""
+    db = SessionLocal()
+    from smos.services.recipe_service import RecipeService
+    svc = RecipeService(db)
+    recipe = svc.create_recipe(title, author_id, steps, problem_type)
+    recipe_id = recipe.id
+    db.close()
+    return f"Recipe created with ID: {recipe_id}"
+
+@mcp.tool()
+def start_cognitive_session(topic: str, timeline_id: int, participants: List[int]) -> str:
+    """Start a collective thinking session on a specific topic"""
+    db = SessionLocal()
+    from smos.services.cognitive_service import CognitiveService
+    svc = CognitiveService(db)
+    session = svc.create_session(None, topic, timeline_id, participants)
+    session_id = session.id
+    db.close()
+    return f"Cognitive Session started with ID: {session_id}"
