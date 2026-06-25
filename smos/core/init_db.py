@@ -4,8 +4,8 @@ from smos.models.goals import Goal, Task
 from smos.models.consensus import Proposal, Vote
 from smos.models.discussion import Comment, Reaction
 from smos.models.cognitive import CognitiveSession, Thought
-from smos.models.entities import DigitalTwin, Cosmonaut
-from smos.models.experience import Recipe, Reconstruction, CausalRelation
+from smos.models.entities import DigitalTwin, Cosmonaut, Constellation
+from smos.models.experience import Recipe, Reconstruction, CausalRelation, RecipeExecution, Wisdom, AntiRecipe
 from sqlalchemy import text
 
 def init_db():

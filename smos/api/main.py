@@ -9,6 +9,10 @@ from smos.services.timeline_service import TimelineService
 from smos.services.cognitive_service import CognitiveService
 from smos.services.recipe_service import RecipeService
 from smos.services.twin_service import TwinService
+from smos.services.execution_service import ExecutionService
+from smos.services.evolution_service import EvolutionService
+from smos.services.community_service import CommunityService
+from smos.services.reconstruction_service import ReconstructionService
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 from datetime import datetime
@@ -76,6 +80,26 @@ def create_recipe(title: str, author_id: int, steps: List[str], problem_type: st
 def create_twin(owner_id: int, goals: List[str], preferences: Dict[str, Any], db: Session = Depends(get_db)):
     svc = TwinService(db)
     return svc.create_twin(owner_id, goals, preferences)
+
+@app.post("/recipe/execute")
+def execute_recipe(recipe_id: int, participants: List[int], result: str, db: Session = Depends(get_db)):
+    svc = ExecutionService(db)
+    return svc.record_execution(recipe_id, participants, result)
+
+@app.post("/recipe/evolve")
+def evolve_recipe(parent_id: int, mutations: List[Dict[str, Any]], db: Session = Depends(get_db)):
+    svc = EvolutionService(db)
+    return svc.evolve_recipe(parent_id, mutations)
+
+@app.post("/community/constellation")
+def create_constellation(mission: str, members: List[int], db: Session = Depends(get_db)):
+    svc = CommunityService(db)
+    return svc.create_constellation(mission, members)
+
+@app.post("/reconstruct")
+def reconstruct(observations: List[str], artifacts: List[str], witnesses: List[str], db: Session = Depends(get_db)):
+    svc = ReconstructionService(db)
+    return svc.reconstruct_experience(observations, artifacts, witnesses)
 
 @app.get("/memory/search")
 def search_memory(q: str, user_id: int, limit: int = 20, db: Session = Depends(get_db)):

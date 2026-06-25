@@ -15,9 +15,18 @@ class DigitalTwin(Base):
 class Cosmonaut(Base):
     __tablename__ = "cosmonauts"
     id = Column(Integer, primary_key=True, index=True)
-    type = Column(String) # HUMAN, LLM, AGENT, DIGITAL_TWIN, SIMULATION
+    type = Column(String) # HUMAN, LLM, AGENT, DIGITAL_TWIN, SIMULATION, HISTORIAN, RECONSTRUCTOR
     name = Column(String)
     reputation_score = Column(Float, default=0.0)
     expertise = Column(JSON, default=[])
     successful_recipes_count = Column(Integer, default=0)
     failed_recipes_count = Column(Integer, default=0)
+
+class Constellation(Base):
+    __tablename__ = "constellations"
+    id = Column(Integer, primary_key=True, index=True)
+    mission = Column(String)
+    members = Column(JSON, default=[]) # List of cosmonaut IDs
+    recipes = Column(JSON, default=[]) # Shared recipes
+    reputation_score = Column(Float, default=0.0)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

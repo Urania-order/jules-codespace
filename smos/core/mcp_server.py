@@ -89,3 +89,35 @@ def start_cognitive_session(topic: str, timeline_id: int, participants: List[int
     session_id = session.id
     db.close()
     return f"Cognitive Session started with ID: {session_id}"
+
+@mcp.tool()
+def execute_recipe(recipe_id: int, participants: List[int], result: str) -> str:
+    """Record the outcome of a recipe execution"""
+    db = SessionLocal()
+    from smos.services.execution_service import ExecutionService
+    svc = ExecutionService(db)
+    exe = svc.record_execution(recipe_id, participants, result)
+    exe_id = exe.id
+    db.close()
+    return f"Recipe Execution recorded with ID: {exe_id}, Result: {result}"
+
+@mcp.tool()
+def inherit_knowledge(cosmonaut_id: int, topic: str) -> str:
+    """Download successful experience and recipes from other participants on a topic"""
+    db = SessionLocal()
+    from smos.services.community_service import CommunityService
+    svc = CommunityService(db)
+    recipes = svc.inherit_experience(cosmonaut_id, topic)
+    db.close()
+    return f"Inherited {len(recipes)} recipes on topic: {topic}"
+
+@mcp.tool()
+def reconstruct_experience(observations: List[str], artifacts: List[str], witnesses: List[str]) -> str:
+    """Infer missing event data or past failures from evidence"""
+    db = SessionLocal()
+    from smos.services.reconstruction_service import ReconstructionService
+    svc = ReconstructionService(db)
+    rec = svc.reconstruct_experience(observations, artifacts, witnesses)
+    rec_id = rec.id
+    db.close()
+    return f"Experience Reconstruction created with ID: {rec_id}, Level: {rec.evidence_level}"

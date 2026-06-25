@@ -1,28 +1,33 @@
 from sqlalchemy.orm import Session
-from smos.models.experience import Reconstruction, CausalRelation
+from smos.models.experience import Reconstruction, CausalRelation, AntiRecipe
 from typing import List, Dict, Any
 
 class ReconstructionService:
     def __init__(self, db: Session):
         self.db = db
 
-    def reconstruct_event(self, evidence: List[Dict[str, Any]], confidence: float):
+    def reconstruct_experience(self, observations: List[str], artifacts: List[str], witnesses: List[str], level: str = "RECONSTRUCTED"):
         reconstruction = Reconstruction(
-            evidence=evidence,
-            confidence=confidence,
-            inferred_facts={"status": "reconstructed", "reasoning": "Based on event log and causal graph"}
+            observations=observations,
+            artifacts=artifacts,
+            witnesses=witnesses,
+            evidence_level=level,
+            confidence=0.7,
+            inferred_facts={"scenario": "Failure during deployment reconstructed from logs"}
         )
         self.db.add(reconstruction)
         self.db.commit()
         self.db.refresh(reconstruction)
         return reconstruction
 
-    def add_causal_relation(self, cause_id: int, effect_id: int, confidence: float):
-        relation = CausalRelation(
-            cause_node_id=cause_id,
-            effect_node_id=effect_id,
-            confidence=confidence
+    def create_anti_recipe(self, reconstruction_id: int, pattern: str, signs: List[str]):
+        anti = AntiRecipe(
+            description=f"Avoid this: {pattern}",
+            failure_pattern=pattern,
+            warning_signs=signs,
+            reconstruction_id=reconstruction_id
         )
-        self.db.add(relation)
+        self.db.add(anti)
         self.db.commit()
-        return relation
+        self.db.refresh(anti)
+        return anti
