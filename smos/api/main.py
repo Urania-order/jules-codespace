@@ -17,6 +17,9 @@ from smos.services.epistemic_service import EpistemicService
 from smos.services.discovery_service import DiscoveryService
 from smos.services.lost_knowledge_service import LostKnowledgeService
 from smos.services.coevolution_service import CoevolutionService
+from smos.services.impact_service import ImpactService
+from smos.services.translator_service import TranslatorService
+from smos.services.ecology_service import EcologyService
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 from datetime import datetime
@@ -119,6 +122,21 @@ def create_intellectual_cluster(name: str, domains: List[str], db: Session = Dep
 def validate_understanding(agent_id: int, human_id: int, original: str, feedback: str, db: Session = Depends(get_db)):
     svc = CoevolutionService(db)
     return svc.validate_understanding(agent_id, human_id, original, feedback)
+
+@app.post("/impact")
+def record_impact(node_id: int, domain: str, impact_type: str, confidence: float, db: Session = Depends(get_db)):
+    svc = ImpactService(db)
+    return svc.record_impact(node_id, domain, impact_type, confidence)
+
+@app.post("/translate")
+def translate(source_id: int, target_profile_id: int, content: str, db: Session = Depends(get_db)):
+    svc = TranslatorService(db)
+    return svc.translate_message(source_id, target_profile_id, content)
+
+@app.get("/pollinate/{cluster_id}")
+def pollinate(cluster_id: int, db: Session = Depends(get_db)):
+    svc = EcologyService(db)
+    return svc.pollinate(cluster_id)
 
 @app.get("/memory/search")
 def search_memory(q: str, user_id: int, limit: int = 20, db: Session = Depends(get_db)):

@@ -19,6 +19,9 @@ class IntellectualCluster(Base):
     is_provisional = Column(Boolean, default=False)
     human_sponsor_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     status = Column(String, default="ACTIVE") # PROVISIONAL, ACTIVE, ARCHIVED
+    dormant_topics = Column(JSON, default=[])
+    activation_threshold = Column(Float, default=0.5)
+    ambassador_id = Column(Integer, ForeignKey("cosmonauts.id"), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class ClusterRelation(Base):

@@ -9,6 +9,8 @@ from smos.models.experience import Recipe, Reconstruction, CausalRelation, Recip
 from smos.models.epistemic import EpistemicLayer, IntellectualCluster, ClusterRelation
 from smos.models.discovery import LostKnowledge, Hypothesis, DiscoveryRecovery
 from smos.models.coevolution import UnderstandingValidation, ComprehensionTest
+from smos.models.entities import BehaviorProfile, LLMProfile
+from smos.models.ecology import KnowledgeImpact, KnowledgeActivation, TranslatedMessage
 from sqlalchemy import text
 
 def init_db():

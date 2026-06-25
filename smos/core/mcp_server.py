@@ -153,3 +153,35 @@ def recover_knowledge(lk_id: int, hypothesis: str) -> str:
     h_id = h.id
     db.close()
     return f"Hypothesis {h_id} added to Lost Knowledge {lk_id}"
+
+@mcp.tool()
+def translate_message(source_id: int, target_profile_id: int, content: str) -> str:
+    """Translate a message to match a specific cognitive or behavioral profile"""
+    db = SessionLocal()
+    from smos.services.translator_service import TranslatorService
+    svc = TranslatorService(db)
+    trans = svc.translate_message(source_id, target_profile_id, content)
+    rewrite = trans.suggested_rewrite
+    db.close()
+    return f"Suggested Rewrite: {rewrite}"
+
+@mcp.tool()
+def query_backward_impact(node_id: int, domain: str) -> str:
+    """Find hidden influences of a piece of knowledge on other domains"""
+    db = SessionLocal()
+    from smos.services.impact_service import ImpactService
+    svc = ImpactService(db)
+    impact = svc.record_impact(node_id, domain, "UNKNOWN_CASCADE_EFFECT", 0.5)
+    impact_id = impact.id
+    db.close()
+    return f"Backward impact recorded with ID: {impact_id}"
+
+@mcp.tool()
+def pollinate_knowledge(cluster_id: int) -> str:
+    """Find related clusters and suggest knowledge transfer (pollination)"""
+    db = SessionLocal()
+    from smos.services.ecology_service import EcologyService
+    svc = EcologyService(db)
+    suggestions = svc.pollinate(cluster_id)
+    db.close()
+    return f"Pollination suggestions for cluster {cluster_id}: {suggestions}"
