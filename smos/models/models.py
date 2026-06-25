@@ -105,11 +105,26 @@ class Relation(Base):
     to_node_id = Column(Integer, ForeignKey("memory_nodes.id"))
     type = Column(Enum(RelationType))
 
+class Stream(Base):
+    __tablename__ = "streams"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    description = Column(String, nullable=True)
+    owner_id = Column(Integer, ForeignKey("users.id"))
+    workspace_id = Column(Integer, ForeignKey("workspaces.id"), nullable=True)
+    active_goal_id = Column(Integer, nullable=True)
+    repository = Column(String, nullable=True)
+    tags = Column(JSON, default=[])
+    visibility = Column(String, default="Personal") # Personal, Team, Public
+
 class Event(Base):
     __tablename__ = "events"
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     workspace_id = Column(Integer, ForeignKey("workspaces.id"), nullable=True)
+    stream_id = Column(Integer, ForeignKey("streams.id"), nullable=True)
     type = Column(String) # e.g., clipboard, input, browser
     content = Column(JSON)
+    application = Column(String, nullable=True)
+    window_title = Column(String, nullable=True)
     timestamp = Column(DateTime(timezone=True), server_default=func.now())

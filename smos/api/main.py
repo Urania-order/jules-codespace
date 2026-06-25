@@ -15,8 +15,11 @@ app = FastAPI(title="Co-SMOS API", version="0.1")
 class EventCreate(BaseModel):
     user_id: int
     workspace_id: Optional[int] = None
+    stream_id: Optional[int] = None
     type: str
     content: Dict[str, Any]
+    application: Optional[str] = None
+    window_title: Optional[str] = None
 
 @app.get("/")
 def read_root():
@@ -30,8 +33,11 @@ def create_event(event: EventCreate, db: Session = Depends(get_db)):
     db_event = DBEvent(
         user_id=event.user_id,
         workspace_id=event.workspace_id,
+        stream_id=event.stream_id,
         type=event.type,
-        content=event.content
+        content=event.content,
+        application=event.application,
+        window_title=event.window_title
     )
     db.add(db_event)
     db.commit()
