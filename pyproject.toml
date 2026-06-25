@@ -1,0 +1,31 @@
+[project]
+name = "smos"
+version = "0.1.0"
+description = "Cooperative Semantic Memory OS"
+authors = [{name = "Jules"}]
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "sqlalchemy",
+    "psycopg2-binary",
+    "pgvector",
+    "pydantic",
+    "lancedb",
+    "networkx",
+    "openai",
+    "requests",
+    "playwright",
+    "httpx",
+    "python-multipart",
+    "mcp"
+]
+
+[tool.poetry]
+packages = [{include = "smos"}]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
