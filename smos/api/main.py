@@ -20,6 +20,13 @@ from smos.services.coevolution_service import CoevolutionService
 from smos.services.impact_service import ImpactService
 from smos.services.translator_service import TranslatorService
 from smos.services.ecology_service import EcologyService
+from smos.services.resonance_service import ResonanceService
+from smos.services.signal_service import SignalService
+from smos.services.causality_service import CausalityService
+from smos.services.value_service import ValueService
+from smos.services.research_service import ResearchService
+from smos.services.sovereignty_service import SovereigntyService
+from smos.services.economy_service import EconomyService
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 from datetime import datetime
@@ -137,6 +144,46 @@ def translate(source_id: int, target_profile_id: int, content: str, db: Session 
 def pollinate(cluster_id: int, db: Session = Depends(get_db)):
     svc = EcologyService(db)
     return svc.pollinate(cluster_id)
+
+@app.post("/resonance")
+def record_resonance(source_id: int, target_id: int, strength: float, delay: int = 0, db: Session = Depends(get_db)):
+    svc = ResonanceService(db)
+    return svc.record_resonance(source_id, target_id, strength, delay)
+
+@app.post("/causal-chain")
+def discover_chain(origin_node_id: int, events: List[str], confidence: float, db: Session = Depends(get_db)):
+    svc = CausalityService(db)
+    return svc.discover_causal_chain(origin_node_id, events, confidence)
+
+@app.post("/signal")
+def emit_signal(node_id: int, target_cluster_id: Optional[int] = None, strength: float = 0.5, db: Session = Depends(get_db)):
+    svc = SignalService(db)
+    return svc.emit_signal(node_id, target_cluster_id, strength=strength)
+
+@app.post("/value/assess")
+def assess_value(node_id: int, benefit: float, impact: float, db: Session = Depends(get_db)):
+    svc = ValueService(db)
+    return svc.assess_knowledge_value(node_id, benefit, impact)
+
+@app.post("/research/portal")
+def open_research_portal(hypothesis_id: int, db: Session = Depends(get_db)):
+    svc = ResearchService(db)
+    return svc.open_portal(hypothesis_id)
+
+@app.post("/research/sponsor")
+def sponsor_research(portal_id: int, sponsor_id: int, amount: float, db: Session = Depends(get_db)):
+    svc = ResearchService(db)
+    return svc.sponsor_research(portal_id, sponsor_id, amount)
+
+@app.post("/reputation/credit")
+def issue_credit(cosmonaut_id: int, amount: float, reason: str, db: Session = Depends(get_db)):
+    svc = EconomyService(db)
+    return svc.issue_reputation_credits(cosmonaut_id, amount, reason)
+
+@app.get("/provenance/{node_id}")
+def get_provenance(node_id: int, db: Session = Depends(get_db)):
+    from smos.models.ecology import ProvenanceRecord
+    return db.query(ProvenanceRecord).filter(ProvenanceRecord.node_id == node_id).first()
 
 @app.get("/memory/search")
 def search_memory(q: str, user_id: int, limit: int = 20, db: Session = Depends(get_db)):

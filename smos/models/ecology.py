@@ -21,6 +21,53 @@ class KnowledgeActivation(Base):
     decay_rate = Column(Float, default=0.01)
     last_reinforced_at = Column(DateTime(timezone=True), server_default=func.now())
 
+class ValueAssessment(Base):
+    __tablename__ = "value_assessments"
+    id = Column(Integer, primary_key=True, index=True)
+    node_id = Column(Integer, ForeignKey("memory_nodes.id"))
+    knowledge_value = Column(Float, default=0.0)
+    human_benefit = Column(Float, default=0.0)
+    environmental_impact = Column(Float, default=0.0)
+    social_impact = Column(Float, default=0.0)
+    uncertainty = Column(Float, default=0.0)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class ResearchPortal(Base):
+    __tablename__ = "research_portals"
+    id = Column(Integer, primary_key=True, index=True)
+    hypothesis_id = Column(Integer, ForeignKey("hypotheses.id"))
+    budget = Column(Float, default=0.0)
+    status = Column(String, default="OPEN") # OPEN, FUNDED, COMPLETED
+    outcomes = Column(JSON, default=[])
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class ResearchSponsorship(Base):
+    __tablename__ = "research_sponsorships"
+    id = Column(Integer, primary_key=True, index=True)
+    portal_id = Column(Integer, ForeignKey("research_portals.id"))
+    sponsor_id = Column(Integer, ForeignKey("users.id"))
+    amount = Column(Float)
+    is_transparent = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class ProvenanceRecord(Base):
+    __tablename__ = "provenance_records"
+    id = Column(Integer, primary_key=True, index=True)
+    node_id = Column(Integer, ForeignKey("memory_nodes.id"))
+    created_by_id = Column(Integer, ForeignKey("cosmonauts.id"))
+    contributors = Column(JSON, default=[]) # List of cosmonaut IDs
+    evidence_links = Column(JSON, default=[])
+    revision_history = Column(JSON, default=[])
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class ReputationCredit(Base):
+    __tablename__ = "reputation_credits"
+    id = Column(Integer, primary_key=True, index=True)
+    cosmonaut_id = Column(Integer, ForeignKey("cosmonauts.id"))
+    amount = Column(Float, default=0.0)
+    reason = Column(String)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
 class TranslatedMessage(Base):
     __tablename__ = "translated_messages"
     id = Column(Integer, primary_key=True, index=True)

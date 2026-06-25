@@ -185,3 +185,34 @@ def pollinate_knowledge(cluster_id: int) -> str:
     suggestions = svc.pollinate(cluster_id)
     db.close()
     return f"Pollination suggestions for cluster {cluster_id}: {suggestions}"
+
+@mcp.tool()
+def assess_value(node_id: int, benefit: float, impact: float) -> str:
+    """Assess the value of knowledge based on human benefit and impact"""
+    db = SessionLocal()
+    from smos.services.value_service import ValueService
+    svc = ValueService(db)
+    assessment = svc.assess_knowledge_value(node_id, benefit, impact)
+    val_id = assessment.id
+    db.close()
+    return f"Value Assessment created with ID: {val_id}, Score: {assessment.knowledge_value}"
+
+@mcp.tool()
+def fund_research(hypothesis_id: int, amount: float, sponsor_id: int) -> str:
+    """Open a funding portal and sponsor a research hypothesis"""
+    db = SessionLocal()
+    from smos.services.research_service import ResearchService
+    svc = ResearchService(db)
+    portal = svc.open_portal(hypothesis_id)
+    svc.sponsor_research(portal.id, sponsor_id, amount)
+    db.close()
+    return f"Research funded for hypothesis {hypothesis_id} with amount: {amount}"
+
+@mcp.tool()
+def verify_provenance(node_id: int) -> str:
+    """Verify the origin and contributors of a piece of knowledge"""
+    db = SessionLocal()
+    from smos.models.ecology import ProvenanceRecord
+    record = db.query(ProvenanceRecord).filter(ProvenanceRecord.node_id == node_id).first()
+    db.close()
+    return f"Provenance Record: {record.id if record else 'Not found'}"
