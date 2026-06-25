@@ -96,6 +96,9 @@ class MemoryNode(Base):
     workspace_id = Column(Integer, ForeignKey("workspaces.id"))
     timeline_id = Column(Integer, ForeignKey("timelines.id"))
     reality_level = Column(String, default="REAL")
+    epistemic_status = Column(String, default="UNVERIFIED") # CONSENSUS_SCIENCE, BEYOND_CONSENSUS, etc.
+    layer_ids = Column(JSON, default=[]) # List of EpistemicLayer IDs
+    cluster_ids = Column(JSON, default=[]) # List of IntellectualCluster IDs
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class Relation(Base):

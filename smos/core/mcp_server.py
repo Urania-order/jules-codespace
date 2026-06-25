@@ -121,3 +121,35 @@ def reconstruct_experience(observations: List[str], artifacts: List[str], witnes
     rec_id = rec.id
     db.close()
     return f"Experience Reconstruction created with ID: {rec_id}, Level: {rec.evidence_level}"
+
+@mcp.tool()
+def cross_pollinate(cluster_a: int, cluster_b: int) -> str:
+    """Link two intellectual clusters and find analogical patterns"""
+    db = SessionLocal()
+    from smos.services.discovery_service import DiscoveryService
+    svc = DiscoveryService(db)
+    svc.link_clusters(cluster_a, cluster_b, "SHARES_PATTERNS")
+    db.close()
+    return f"Clusters {cluster_a} and {cluster_b} cross-pollinated."
+
+@mcp.tool()
+def validate_understanding(agent_id: int, human_id: int, interpretation: str) -> str:
+    """Start a human-AI understanding validation cycle"""
+    db = SessionLocal()
+    from smos.services.coevolution_service import CoevolutionService
+    svc = CoevolutionService(db)
+    val = svc.validate_understanding(agent_id, human_id, interpretation, "Awaiting feedback")
+    val_id = val.id
+    db.close()
+    return f"Understanding Validation initiated with ID: {val_id}"
+
+@mcp.tool()
+def recover_knowledge(lk_id: int, hypothesis: str) -> str:
+    """Add a new hypothesis to lost knowledge for potential recovery"""
+    db = SessionLocal()
+    from smos.services.lost_knowledge_service import LostKnowledgeService
+    svc = LostKnowledgeService(db)
+    h = svc.add_hypothesis(lk_id, hypothesis, 0.5)
+    h_id = h.id
+    db.close()
+    return f"Hypothesis {h_id} added to Lost Knowledge {lk_id}"

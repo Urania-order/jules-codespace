@@ -6,6 +6,9 @@ from smos.models.discussion import Comment, Reaction
 from smos.models.cognitive import CognitiveSession, Thought
 from smos.models.entities import DigitalTwin, Cosmonaut, Constellation
 from smos.models.experience import Recipe, Reconstruction, CausalRelation, RecipeExecution, Wisdom, AntiRecipe
+from smos.models.epistemic import EpistemicLayer, IntellectualCluster, ClusterRelation
+from smos.models.discovery import LostKnowledge, Hypothesis, DiscoveryRecovery
+from smos.models.coevolution import UnderstandingValidation, ComprehensionTest
 from sqlalchemy import text
 
 def init_db():

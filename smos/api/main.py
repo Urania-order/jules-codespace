@@ -13,6 +13,10 @@ from smos.services.execution_service import ExecutionService
 from smos.services.evolution_service import EvolutionService
 from smos.services.community_service import CommunityService
 from smos.services.reconstruction_service import ReconstructionService
+from smos.services.epistemic_service import EpistemicService
+from smos.services.discovery_service import DiscoveryService
+from smos.services.lost_knowledge_service import LostKnowledgeService
+from smos.services.coevolution_service import CoevolutionService
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 from datetime import datetime
@@ -100,6 +104,21 @@ def create_constellation(mission: str, members: List[int], db: Session = Depends
 def reconstruct(observations: List[str], artifacts: List[str], witnesses: List[str], db: Session = Depends(get_db)):
     svc = ReconstructionService(db)
     return svc.reconstruct_experience(observations, artifacts, witnesses)
+
+@app.post("/epistemic/layer")
+def create_epistemic_layer(name: str, confidence: float, evidence_type: str, db: Session = Depends(get_db)):
+    svc = EpistemicService(db)
+    return svc.create_layer(name, confidence, evidence_type)
+
+@app.post("/cluster")
+def create_intellectual_cluster(name: str, domains: List[str], db: Session = Depends(get_db)):
+    svc = DiscoveryService(db)
+    return svc.create_cluster(name, domains)
+
+@app.post("/validate-understanding")
+def validate_understanding(agent_id: int, human_id: int, original: str, feedback: str, db: Session = Depends(get_db)):
+    svc = CoevolutionService(db)
+    return svc.validate_understanding(agent_id, human_id, original, feedback)
 
 @app.get("/memory/search")
 def search_memory(q: str, user_id: int, limit: int = 20, db: Session = Depends(get_db)):
