@@ -26,3 +26,34 @@ class ResearchService:
         self.db.commit()
         self.db.refresh(sponsorship)
         return sponsorship
+
+    def add_milestone(self, portal_id: int, description: str, target_outcome: str):
+        """Add experimental milestone to research portal"""
+        portal = self.db.query(ResearchPortal).get(portal_id)
+        if not portal:
+            return None
+
+        outcomes = list(portal.outcomes)
+        outcomes.append({
+            "milestone": description,
+            "target": target_outcome,
+            "status": "PENDING"
+        })
+        portal.outcomes = outcomes
+        self.db.commit()
+        self.db.refresh(portal)
+        return portal
+
+    def verify_milestone(self, portal_id: int, milestone_index: int, proof_link: str):
+        """Verify milestone achievement by community/participants"""
+        portal = self.db.query(ResearchPortal).get(portal_id)
+        if not portal or milestone_index >= len(portal.outcomes):
+            return None
+
+        outcomes = list(portal.outcomes)
+        outcomes[milestone_index]["status"] = "VERIFIED"
+        outcomes[milestone_index]["proof"] = proof_link
+        portal.outcomes = outcomes
+        self.db.commit()
+        self.db.refresh(portal)
+        return portal

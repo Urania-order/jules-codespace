@@ -31,3 +31,15 @@ class DiscoveryService:
             (ClusterRelation.target_cluster_id == cluster_id)
         ).all()
         return [r.interaction_type for r in relations]
+
+    def backward_discovery(self, outcome_description: str):
+        """Reverse causal search: Find possible contributing knowledge for an outcome"""
+        # Mock implementation for v0.8: find recipes with high success rate and matching problem type
+        from smos.models.experience import Recipe, CausalRelation
+
+        # Real system would use LLM to parse outcome and search CausalRelations
+        hypotheses = [
+            {"knowledge_id": 1, "claim": "Shared vision leads to outcome", "confidence": 0.8},
+            {"knowledge_id": 42, "claim": "Previous failure pattern avoided", "confidence": 0.6}
+        ]
+        return hypotheses

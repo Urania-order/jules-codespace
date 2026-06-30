@@ -29,6 +29,19 @@ class ValueAssessment(Base):
     human_benefit = Column(Float, default=0.0)
     environmental_impact = Column(Float, default=0.0)
     social_impact = Column(Float, default=0.0)
+
+    # Value Physics Metrics
+    energy = Column(Float, default=0.0)
+    momentum = Column(Float, default=0.0)
+    potential = Column(Float, default=0.0)
+    entropy = Column(Float, default=0.0)
+    activation = Column(Float, default=0.0)
+    dormancy = Column(Float, default=0.0)
+    regeneration = Column(Float, default=0.0)
+    decay = Column(Float, default=0.0)
+    resonance = Column(Float, default=0.0)
+    diffusion = Column(Float, default=0.0)
+
     uncertainty = Column(Float, default=0.0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

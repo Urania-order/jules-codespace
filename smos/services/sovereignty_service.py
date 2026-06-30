@@ -24,3 +24,11 @@ class SovereigntyService:
             "preserve_plurality": True,
             "preserve_dissent": True
         }
+
+    def sync_with_federation(self, target_node_url: str):
+        """Mock synchronization with another ECO Co-SMOS node"""
+        return {
+            "status": "SUCCESS",
+            "synced_nodes": 15,
+            "conflicts_resolved": 2
+        }

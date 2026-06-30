@@ -38,3 +38,20 @@ class EcologyService:
             print(f"Notifying Ambassador {cluster.ambassador_id} of cluster {cluster_id}: {message}")
             return True
         return False
+
+    def trigger_resonance(self, source_node_id: int, target_cluster_id: int, strength: float, delay_days: int = 0):
+        """Implement delayed and indirect effects on clusters"""
+        # In v0.8, resonance affects cluster activity and health
+        cluster = self.db.query(IntellectualCluster).get(target_cluster_id)
+        if not cluster:
+            return False
+
+        # Apply impact (mocking delay by just recording it for now)
+        cluster.activity += strength * 0.2
+        cluster.resonance += strength
+
+        if strength > 0.8:
+            cluster.health += 0.05
+
+        self.db.commit()
+        return True

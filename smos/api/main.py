@@ -190,9 +190,12 @@ def search_memory(q: str, user_id: int, limit: int = 20, db: Session = Depends(g
     # Basic permission check: only return public or owned nodes
     # (In a real system, we'd also check workspace memberships)
     embedding = embedding_service.get_embedding(q)
-    results = db.query(MemoryNode).filter(
+
+    query = db.query(MemoryNode).filter(
         (MemoryNode.owner_id == user_id) | (MemoryNode.workspace_id.isnot(None))
-    ).order_by(
+    )
+
+    results = query.order_by(
         MemoryNode.embeddings.l2_distance(embedding)
     ).limit(limit).all()
 

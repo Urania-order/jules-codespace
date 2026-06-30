@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from smos.models.ecology import TranslatedMessage
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 class TranslatorService:
     def __init__(self, db: Session):
@@ -27,4 +27,21 @@ class TranslatorService:
         return {
             "neutral_ground": "Both parties value productivity but have different speeds.",
             "suggested_compromise": "User A provides quick drafts, User B performs deep review weekly."
+        }
+
+    def explain_intent(self, message_content: str, author_id: int):
+        """Explain the underlying intent of a message to reduce misunderstanding"""
+        # In v0.8, this would be LLM-driven
+        return {
+            "original": message_content,
+            "inferred_intent": "The author is seeking critical feedback to improve the quality, not criticizing the recipient.",
+            "suggested_response_style": "Constructive and detailed."
+        }
+
+    def de_escalate(self, interaction_history: List[str]):
+        """Identify rising tension and suggest de-escalation strategies"""
+        return {
+            "tension_level": "MODERATE",
+            "observation": "Direct language is being interpreted as hostile.",
+            "advice": "Switch to asynchronous communication for 24 hours to allow for reflection."
         }

@@ -32,6 +32,16 @@ class MemoryType(str, enum.Enum):
     IDEA = "IdeaNode"
     CODE = "CodeNode"
 
+class KnowledgeLifecycleState(str, enum.Enum):
+    IDEA = "IDEA"
+    DISCUSSION = "DISCUSSION"
+    RECIPE = "RECIPE"
+    EXPERIMENT = "EXPERIMENT"
+    PRACTICE = "PRACTICE"
+    BEHAVIOR_CHANGE = "BEHAVIOR_CHANGE"
+    COLLECTIVE_EXPERIENCE = "COLLECTIVE_EXPERIENCE"
+    IMPROVED_KNOWLEDGE = "IMPROVED_KNOWLEDGE"
+
 class RelationType(str, enum.Enum):
     RELATED_TO = "RELATED_TO"
     PART_OF = "PART_OF"
@@ -62,6 +72,12 @@ class User(Base):
     public_key = Column(String, nullable=True)
     preferences = Column(JSON, default={})
     role = Column(Enum(UserRole), default=UserRole.READER)
+
+    # Behavioral Profile
+    communication_style = Column(String, nullable=True)
+    conflict_tolerance = Column(Float, default=0.5)
+    thinking_speed = Column(String, default="BALANCED") # FAST, BALANCED, DEEP
+    creativity = Column(Float, default=0.5)
 
 class Workspace(Base):
     __tablename__ = "workspaces"
@@ -96,6 +112,7 @@ class MemoryNode(Base):
     workspace_id = Column(Integer, ForeignKey("workspaces.id"))
     timeline_id = Column(Integer, ForeignKey("timelines.id"))
     reality_level = Column(String, default="REAL")
+    lifecycle_state = Column(Enum(KnowledgeLifecycleState), default=KnowledgeLifecycleState.IDEA)
     epistemic_status = Column(String, default="UNVERIFIED") # CONSENSUS_SCIENCE, BEYOND_CONSENSUS, etc.
     layer_ids = Column(JSON, default=[]) # List of EpistemicLayer IDs
     cluster_ids = Column(JSON, default=[]) # List of IntellectualCluster IDs
