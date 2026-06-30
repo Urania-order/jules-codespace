@@ -32,6 +32,25 @@ class MemoryType(str, enum.Enum):
     IDEA = "IdeaNode"
     CODE = "CodeNode"
 
+class KnowledgeLifecycleState(str, enum.Enum):
+    IDEA = "Idea"
+    DISCUSSION = "Discussion"
+    RECIPE = "Recipe"
+    EXPERIMENT = "Experiment"
+    PRACTICE = "Practice"
+    BEHAVIOR_CHANGE = "Behavior Change"
+    COLLECTIVE_EXPERIENCE = "Collective Experience"
+    IMPROVED_KNOWLEDGE = "Improved Knowledge"
+
+class EpistemicStatus(str, enum.Enum):
+    VERIFIED = "Verified"
+    HYPOTHESIS = "Hypothesis"
+    COUNTERFACTUAL = "Counterfactual"
+    HISTORICAL_RECONSTRUCTION = "Historical Reconstruction"
+    SPECULATIVE = "Speculative"
+    BEYOND_ALL_CONSENSUS = "Beyond All Consensus"
+    UNVERIFIED = "Unverified"
+
 class RelationType(str, enum.Enum):
     RELATED_TO = "RELATED_TO"
     PART_OF = "PART_OF"
@@ -96,7 +115,8 @@ class MemoryNode(Base):
     workspace_id = Column(Integer, ForeignKey("workspaces.id"))
     timeline_id = Column(Integer, ForeignKey("timelines.id"))
     reality_level = Column(String, default="REAL")
-    epistemic_status = Column(String, default="UNVERIFIED") # CONSENSUS_SCIENCE, BEYOND_CONSENSUS, etc.
+    lifecycle_state = Column(Enum(KnowledgeLifecycleState), default=KnowledgeLifecycleState.IDEA)
+    epistemic_status = Column(Enum(EpistemicStatus), default=EpistemicStatus.UNVERIFIED)
     layer_ids = Column(JSON, default=[]) # List of EpistemicLayer IDs
     cluster_ids = Column(JSON, default=[]) # List of IntellectualCluster IDs
     created_at = Column(DateTime(timezone=True), server_default=func.now())
