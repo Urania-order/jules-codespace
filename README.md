@@ -1,31 +1,34 @@
-# ECO Co-SMOS (v0.8)
+# ECO Co-SMOS (v0.9)
 
 ## Overview
 
-ECO Co-SMOS (Cooperative Semantic Memory Operating System) is a living ecosystem where knowledge evolves through cooperation between humans and AI agents. Moving beyond the concept of a "graph database" or "collaborative memory," ECO Co-SMOS treats knowledge as a dynamic entity with its own lifecycle and physics.
+ECO Co-SMOS (Cooperative Semantic Memory Operating System) is a living ecosystem for the cooperative evolution of knowledge between humans and AI. Moving beyond static memory, ECO Co-SMOS creates a **Commons** where knowledge is treated as a dynamic entity, continuously observed and nurtured through the **Observatory**.
 
-## Key Features
+## Core Philosophy
 
-- **Knowledge Ecology Engine:** Manages the lifecycle, propagation, and evolution of knowledge.
-- **Value Physics:** A dynamic metric system (Energy, Momentum, Resonance) that evaluates the long-term impact of knowledge rather than its popularity.
-- **Knowledge Lifecycle:** Tracks the evolution of ideas from initial sparks to collective behaviors and improved practices.
-- **Attention Ecology:** Recommends under-discovered but valuable knowledge based on successful outcomes and practical application.
-- **Resonance Engine:** Identifies how knowledge influences clusters, people, and habits, supporting delayed and indirect effects.
-- **Backward Knowledge Discovery:** A reverse causal search engine that finds contributing knowledge and forgotten recipes for observed outcomes.
-- **Living Cluster Ecology:** Clusters are living entities with health, diversity, and behavioral population metrics.
-- **Human–AI Symbiosis:** A core principle where human meaning is required to maximize knowledge value.
-- **Behavioral Collaboration Layer:** Matches collaborators by cognitive style and utilizes AI Translator Agents to bridge misunderstandings.
-- **Epistemic Layers:** Preserves minority knowledge (Hypothesis, Counterfactual, Speculative) while maintaining clear boundaries from verified consensus.
-- **Knowledge Sovereignty:** Designed for federation and distributed preservation, resisting centralized control.
-- **Research Funding Portals:** A framework for collective sponsorship of research based on experimental milestones and public outcomes.
+- **Knowledge is an Ecology:** It is not just stored; it propagates, resonates, and evolves.
+- **Value is Implementation:** Knowledge value emerges through practical application and human meaning.
+- **Collective Learning:** The system maximizes collective intelligence rather than individual engagement.
 
-## Why ECO Co-SMOS?
+## Architectural Layers
 
-In an era of information overload, we don't need more storage; we need better evolution. ECO Co-SMOS provides the tools to transform raw data into collective experience and positive societal impact.
+1.  **The Commons:** The shared interaction layer where humans and AI agents collaborate on recipes, experiments, and cluster evolution.
+2.  **The Observatory:** A meta-layer that measures ecosystem health, tracks evolution, and generates quarterly reports on knowledge adoption and resonance.
+3.  **Knowledge Ecology:** Services managing the lifecycle, resonance, and pollination of intellectual clusters.
+4.  **Value Physics:** Dynamic recalculation of knowledge energy, momentum, and impact based on real-world implementation.
+
+## Key Subsystems
+
+- **Living Cluster Ecology:** Clusters with health, diversity, and behavioral population metrics.
+- **Attention Ecology:** Redirects focus toward under-discovered gems and forgotten wisdom.
+- **Backward Knowledge Discovery:** Reverse causal search to find historical influences and dormant contributors.
+- **Behavioral Collaboration:** AI Translator Agents that bridge cognitive styles and de-escalate conflicts.
+- **Epistemic Layers:** Strict preservation of consensus vs. minority knowledge (Hypothesis, Counterfactual, Speculative).
+- **Federated Sovereignty:** Distributed preservation and provenance tracking.
 
 ## Getting Started
 
-Refer to `ARCHITECTURE.md` for a technical deep dive and `ECOLOGY.md` to understand the living systems within Co-SMOS.
+Refer to `ARCHITECTURE.md` for the ecosystem design and `COMMONS.md` to understand the interaction layer.
 
 ## License
 

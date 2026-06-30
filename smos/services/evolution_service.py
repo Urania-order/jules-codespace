@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
 from smos.models.experience import Recipe, Wisdom, RecipeExecution
 from smos.models.models import MemoryNode, KnowledgeLifecycleState
+from smos.core.interfaces import Evolvable
 from typing import List, Dict, Any
 
-class EvolutionService:
+class EvolutionService(Evolvable):
     def __init__(self, db: Session):
         self.db = db
 
@@ -70,3 +71,7 @@ class EvolutionService:
         self.db.commit()
         self.db.refresh(node)
         return node
+
+    def get_lifecycle_state(self, entity_id: int) -> str:
+        node = self.db.query(MemoryNode).get(entity_id)
+        return str(node.lifecycle_state) if node else "None"

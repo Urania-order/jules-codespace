@@ -1,32 +1,38 @@
-# ECO Co-SMOS Architecture
+# ECO Co-SMOS Architecture (v0.9)
 
-## System Design
+## Ecosystem Design
 
-ECO Co-SMOS is built as a modular ecosystem of services interacting with a central semantic and relational database (PostgreSQL with `pgvector`).
+ECO Co-SMOS v0.9 integrates all subsystems into a coherent civilizational observatory centered around the **Commons**.
 
-### Core Subsystems
+### 1. Interaction Layer: The Commons (`COMMONS.md`)
+- Facilitates collaboration between Cosmonauts (Humans and AI).
+- Connects recipes to experiments and communities.
 
-1.  **Knowledge Ecology Engine (`smos/services/knowledge_ecology_engine.py`)**
-    - The orchestrator of the knowledge lifecycle. It manages how nodes move between states (Idea -> Recipe -> Practice).
-2.  **Value Physics Engine (`smos/services/value_physics_engine.py`)**
-    - Calculates dynamic metrics for every knowledge object. Unlike traditional scoring, these values (Momentum, Potential, Entropy) are recalculated based on interaction and impact.
-3.  **Attention Ecology Service (`smos/services/attention_ecology_service.py`)**
-    - A recommendation layer focused on utility and "low-resonance" gems—valuable knowledge that hasn't yet reached its potential audience.
-4.  **Resonance & Discovery (`smos/services/discovery_service.py`, `smos/services/ecology_service.py`)**
-    - Implements semantic similarity, analogy detection, and backward discovery (reverse causal search).
-5.  **Behavioral Collaboration Layer (`smos/services/translator_service.py`, `smos/services/twin_service.py`)**
-    - Manages `Cosmonaut` profiles (Humans and AI) and facilitates cooperation through translation of cognitive styles.
+### 2. Observation Layer: The Observatory (`OBSERVATORY.md`)
+- Monitors ecosystem health and knowledge evolution.
+- Generates **Quarterly Observatory Reports**.
+- Identifies emerging disciplines and future opportunities.
 
-## Data Model
+### 3. Intelligence Layer: Knowledge Ecology
+- **Ecology Engine:** Manages cluster resonance, inflow/outflow, and pollination.
+- **Evolution Service:** Tracks the lifecycle (Idea -> Recipe -> Collective Experience).
+- **Discovery System:** Performs semantic analogies and backward causal search.
 
-- **MemoryNode:** The atomic unit of knowledge, featuring `lifecycle_state` and `epistemic_status`.
-- **IntellectualCluster:** A living group of nodes and cosmonauts with its own health and diversity metrics.
-- **Relation:** Directed edges defining the connections (CAUSES, SOLVES, INSPIRED_BY).
-- **Timeline:** Supports parallel realities (REAL, SIMULATION, COUNTERFACTUAL) for experimentation.
+### 4. Valuation Layer: Value Ecology
+- **Value Physics:** Recalculates Energy, Momentum, and Resonance based on implementation.
+- **Attention Engine:** Redirects resources toward overlooked but valuable knowledge.
 
-## Technology Stack
+### 5. Foundation Layer: Memory & Sovereignty
+- **Memory Graph:** Semantic database with `pgvector` and timelines.
+- **Epistemic Service:** Maintains mandatory labels (Verified, Speculative, etc.).
+- **Sovereignty Service:** Manages federation, provenance, and distributed sync.
 
-- **Backend:** FastAPI (Python 3.12)
-- **Database:** PostgreSQL + pgvector
-- **Graph Logic:** NetworkX / Custom SQL
-- **Communication:** MCP (Model Context Protocol) for AI agent integration.
+## Common Interfaces
+
+Subsystems interact through standardized interfaces:
+- `Evolvable`: For entities with lifecycles.
+- `Observable`: For reporting metrics to the Observatory.
+
+## Subsystem Interaction
+
+The **Observatory** queries all **Observable** subsystems to measure the collective state. The **Commons** acts as the primary driver of activity, feeding events back into the **Knowledge Ecology** and **Value Physics** engines.
