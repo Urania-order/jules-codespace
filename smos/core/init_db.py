@@ -15,9 +15,10 @@ from sqlalchemy import text
 
 def init_db():
     # Ensure vector extension is enabled
-    with engine.connect() as conn:
-        conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector;"))
-        conn.commit()
+    if engine.dialect.name == "postgresql":
+        with engine.connect() as conn:
+            conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector;"))
+            conn.commit()
 
     # Make sure all models are imported before calling create_all
     Base.metadata.create_all(bind=engine)
