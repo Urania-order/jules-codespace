@@ -4,6 +4,16 @@
   "agent": "jules",
   "status": "ready",
   "active_task": null,
-  "last_task": null,
-  "history": []
+  "last_task": {
+    "id": "task-20260910-174339",
+    "request": "Analyze project structure and find issues",
+    "status": "completed"
+  },
+  "history": [
+    {
+      "id": "task-20260910-174339",
+      "date": "2026-09-10",
+      "summary": "Analyzed repo structure, added .gitignore, aligned devcontainer/Dockerfile image versions, added scripts/validate.sh."
+    }
+  ]
 }
