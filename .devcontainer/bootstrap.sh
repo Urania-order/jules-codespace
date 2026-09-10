@@ -4,13 +4,10 @@ set -e
 
 echo "🧠 AI Codespace bootstrap starting..."
 
-# Node detect/install
+# Node detect
 if ! command -v node >/dev/null 2>&1; then
-    echo "⚙️ Node not found → installing..."
-
-    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-    sudo apt-get update
-    sudo apt-get install -y nodejs
+    echo "❌ Node not found in devcontainer environment."
+    exit 1
 fi
 
 echo "✅ Node: $(node -v)"
@@ -22,7 +19,7 @@ if ! command -v jules >/dev/null 2>&1; then
     npm install -g @google/jules || echo "⚠️ jules install failed"
 fi
 
-# workspace
-mkdir -p workspace
+# workspace setup
+mkdir -p .jules/tasks .jules/history .jules/results .co-smos
 
 echo "🧪 System ready"

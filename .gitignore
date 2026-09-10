@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+.npm/
+
+# Logs & Execution Results
+*.log
+.jules/results/*.log
+!.jules/results/.gitkeep
+
+# System & OS Files
+.DS_Store
+Thumbs.db
+
+# Temp Files
+*.tmp
+*.swp
+*~

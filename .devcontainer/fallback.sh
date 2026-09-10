@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
+set -e
+
 echo "🚨 FALLBACK MODE ACTIVATED"
 
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get update
-sudo apt-get install -y nodejs npm
+if ! command -v node >/dev/null 2>&1; then
+    sudo apt-get update
+    sudo apt-get install -y nodejs npm
+fi
 
-npm install -g @google/jules
+if ! command -v jules >/dev/null 2>&1; then
+    npm install -g @google/jules
+fi
 
 echo "✅ fallback ready"
-bash
