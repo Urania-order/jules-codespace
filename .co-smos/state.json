@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "project": "jules-codespace",
+  "agent": "jules",
+  "status": "ready",
+  "active_task": null,
+  "last_task": null,
+  "history": []
+}
