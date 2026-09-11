@@ -286,3 +286,180 @@ The project is expected to evolve toward:
 Do not prematurely implement the entire architecture.
 
 Build it incrementally.
+
+---
+
+# 16. Project subsystems
+
+This repository contains two layers.
+
+## 16.1 Orchestration layer (Co-SMOS)
+
+Files:
+
+- `AGENTS.md` — this document
+- `scripts/jules-task.sh` — task dispatcher
+- `scripts/validate.sh` — project validator
+- `.co-smos/state.json` — orchestrator state
+- `.jules/tasks/` — task cards
+- `.jules/results/` — session logs
+- `.jules/history/` — ADRs and decisions
+
+This layer is managed by humans and the orchestrator.
+Jules MUST NOT modify it (see §17).
+
+## 16.2 Application layer (smos/)
+
+Files:
+
+- `smos/api/` — FastAPI application
+- `smos/core/` — database, interfaces, MCP server, security
+- `smos/models/` — SQLAlchemy models
+- `smos/services/` — domain services
+- `tests/` — pytest test suite
+- `pyproject.toml`, `uv.lock` — dependencies
+
+This is where Jules does its work.
+
+### Core interfaces
+
+All subsystems implement one or both of:
+
+- `Evolvable` — entities with a lifecycle
+- `Observable` — subsystems that report health metrics
+
+### Key services
+
+- `EcologyEngine` — cluster resonance, propagation, pollination
+- `ValueEcologyService` — energy, potential, resonance, diffusion
+- `DiscoverySystem` — backward discovery, analogies
+- `CommonsService` — Human-AI collaboration layer
+- `ObservatoryService` — ecosystem health and quarterly reports
+
+### Legacy modules
+
+Older service names were consolidated in v0.9:
+
+| Legacy | Current |
+|--------|---------|
+| `ecology_service` | `ecology_engine` |
+| `knowledge_ecology_engine` | `ecology_engine` |
+| `value_service` | `value_ecology_service` |
+| `value_physics_engine` | `value_ecology_service` |
+| `discovery_service` | `discovery_system` |
+
+Do not reintroduce legacy names.
+
+---
+
+# 17. Forbidden paths
+
+Jules MUST NOT modify:
+
+- `.co-smos/` — orchestrator state
+- `.jules/tasks/` — task cards created by `jules-task.sh`
+- `.jules/results/` — session logs created by `jules-task.sh`
+- `.jules/history/` — existing ADRs
+
+These paths are managed by the orchestrator and human reviewers.
+
+If a task appears to require changing these files, STOP and report
+the conflict instead of modifying them.
+
+Allowed:
+
+- Jules may CREATE a new ADR file in `.jules/history/` when a
+  significant architectural decision is made (e.g. `adr-0002-*.md`).
+  Jules MUST NOT modify existing ADRs.
+
+---
+
+# 18. Required checks before reporting
+
+Before reporting completion, Jules MUST run:
+
+    ./scripts/validate.sh
+    uv run pytest tests/ -v \
+        --ignore=tests/test_ecology_service.py \
+        --ignore=tests/test_value_service.py \
+        --ignore=tests/test_mcp.py
+
+The `--ignore` list exists because these three tests target
+pre-v0.9 APIs that no longer exist. They are kept for historical
+reference and may be rewritten in the future.
+
+If validation or tests fail:
+
+- DO NOT report success
+- Record the failure in `.jules/results/` (append to the session log)
+- Report the failure in the STATUS section
+
+Never claim a test passed if it was not actually executed.
+
+---
+
+# 19. Continuous integration
+
+Every pull request triggers a GitHub Actions workflow
+(`.github/workflows/ci.yml`).
+
+The workflow runs:
+
+1. `uv sync`
+2. `bash scripts/validate.sh`
+3. `uv run pytest tests/ -v` (with the same ignore list)
+
+If CI fails, the PR cannot be merged until it passes.
+
+Jules should assume that any change will be validated by CI and
+must not merge or bypass checks.
+
+---
+
+# 20. Test conventions
+
+Tests use an in-memory SQLite database provided by
+`tests/conftest.py`. The fixture:
+
+- patches `smos.core.database.engine` and `SessionLocal`
+- creates all tables via `Base.metadata.create_all`
+- provides a `db` fixture for per-test sessions
+
+Because SQLite does not support `pgvector`, the `Vector` column
+type is patched to a JSON-serialized `TypeDecorator` when
+`DATABASE_URL` starts with `sqlite`.
+
+Consequences:
+
+- Semantic search (`l2_distance`) is not available in tests.
+  `api/main.py::search_memory` falls back to text search under SQLite.
+- Tests must not depend on pgvector-specific behaviour.
+
+When adding new models:
+
+- Import them in `tests/conftest.py` so `Base.metadata` sees them.
+- Use `JSON` (not `Vector`) unless the column is truly a vector.
+- Prefer `session.get(Model, id)` over `session.query(Model).get(id)`.
+
+When adding new services:
+
+- Place them in `smos/services/`.
+- Add a corresponding `tests/test_<name>.py`.
+- If the service observes ecosystem state, implement `Observable`.
+- If the service manages lifecycles, implement `Evolvable`.
+
+---
+
+# 21. Contribution flow
+
+Standard flow for a non-trivial change:
+
+1. `./scripts/jules-task.sh "<task>"`
+2. Jules works on branch `jules/<task-id>`
+3. Jules runs §18 checks
+4. Jules reports using §14 format
+5. Human reviews the branch and opens a PR
+6. CI runs on the PR (§19)
+7. Human merges when CI is green
+
+Jules never pushes to `main` directly.
