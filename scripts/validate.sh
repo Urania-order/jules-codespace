@@ -1,6 +1,42 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+echo ""
+echo "[2/4] Validating JSON files syntax..."
+JSON_FILES=(
+    ".co-smos/state.json"
+    ".devcontainer/devcontainer.json"
+)
+
+for json_file in "${JSON_FILES[@]}"; do
+    if [ -f "$json_file" ]; then
+        if python3 -m json.tool "$json_file" > /dev/null 2>&1; then
+            echo "  ✅ Valid JSON: $json_file"
+        else
+            echo "  ❌ Invalid JSON: $json_file"
+            ERRORS=$((ERRORS + 1))
+        fi
+    else
+        # state.json is local orchestration state — create default if missing
+        if [ "$json_file" = ".co-smos/state.json" ]; then
+            mkdir -p .co-smos
+            cat > "$json_file" <<'STATE_EOF'
+{
+  "version": 1,
+  "project": "jules-codespace",
+  "agent": "jules",
+  "status": "ready",
+  "active_task": null,
+  "last_task": null,
+  "history": []
+}
+STATE_EOF
+            echo "  ✅ Created default: $json_file"
+        else
+            echo "  ❌ Missing file: $json_file"
+            ERRORS=$((ERRORS + 1))
+        fi
+    fi
+doneset -euo pipefail
 
 echo "=========================================="
 echo " Running Co-SMOS Project Validation Tests"
