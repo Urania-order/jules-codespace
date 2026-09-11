@@ -22,3 +22,4 @@ __pycache__/
 *.pyo
 .venv/
 .pytest_cache/
+.co-smos/state.json
