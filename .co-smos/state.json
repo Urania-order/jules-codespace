@@ -2,8 +2,11 @@
   "version": 1,
   "project": "jules-codespace",
   "agent": "jules",
-  "status": "ready",
-  "active_task": null,
+  "status": "running",
+  "active_task": {
+    "id": "task-20260910-233609",
+    "request": "Проаналізуй тести в tests/ і склади список проблем. Нічого не змінюй. Звітуй у форматі:\n- Які тести падають\n- З яких причин\n- Які модулі вони імпортують\n- Чи існують ці модулі в smos/services/"
+  },
   "last_task": {
     "id": "task-20260910-174339",
     "session_id": "7957150337677705773",
@@ -24,7 +27,14 @@
   ],
   "meta": {
     "orchestrator": "jules-task.sh",
-    "workflow": ["ANALYZE", "PLAN", "IMPLEMENT", "TEST", "REVIEW", "REPORT"],
+    "workflow": [
+      "ANALYZE",
+      "PLAN",
+      "IMPLEMENT",
+      "TEST",
+      "REVIEW",
+      "REPORT"
+    ],
     "branch_policy": "every task runs on jules/<task-id>"
   }
 }

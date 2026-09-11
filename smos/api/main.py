@@ -14,16 +14,16 @@ from smos.services.evolution_service import EvolutionService
 from smos.services.community_service import CommunityService
 from smos.services.reconstruction_service import ReconstructionService
 from smos.services.epistemic_service import EpistemicService
-from smos.services.discovery_service import DiscoveryService
+from smos.services.discovery_system import DiscoverySystem as DiscoveryService
 from smos.services.lost_knowledge_service import LostKnowledgeService
 from smos.services.coevolution_service import CoevolutionService
 from smos.services.impact_service import ImpactService
 from smos.services.translator_service import TranslatorService
-from smos.services.ecology_service import EcologyService
+from smos.services.ecology_engine import EcologyEngine as EcologyService
 from smos.services.resonance_service import ResonanceService
 from smos.services.signal_service import SignalService
 from smos.services.causality_service import CausalityService
-from smos.services.value_service import ValueService
+from smos.services.value_ecology_service import ValueEcologyService as ValueService
 from smos.services.research_service import ResearchService
 from smos.services.sovereignty_service import SovereigntyService
 from smos.services.economy_service import EconomyService
@@ -187,21 +187,29 @@ def get_provenance(node_id: int, db: Session = Depends(get_db)):
 
 @app.get("/memory/search")
 def search_memory(q: str, user_id: int, limit: int = 20, db: Session = Depends(get_db)):
-    # Basic permission check: only return public or owned nodes
-    # (In a real system, we'd also check workspace memberships)
-    embedding = embedding_service.get_embedding(q)
-    results = db.query(MemoryNode).filter(
+    import os
+    is_sqlite = os.getenv("DATABASE_URL", "").startswith("sqlite")
+
+    base_query = db.query(MemoryNode).filter(
         (MemoryNode.owner_id == user_id) | (MemoryNode.workspace_id.isnot(None))
-    ).order_by(
-        MemoryNode.embeddings.l2_distance(embedding)
-    ).limit(limit).all()
+    )
+
+    if is_sqlite:
+        results = base_query.filter(MemoryNode.content.ilike(f"%{q}%")).limit(limit).all()
+        if not results:
+            results = base_query.limit(limit).all()
+    else:
+        embedding = embedding_service.get_embedding(q)
+        results = base_query.order_by(
+            MemoryNode.embeddings.l2_distance(embedding)
+        ).limit(limit).all()
 
     return [
         {
             "id": r.id,
             "content": r.content,
             "type": r.type,
-            "reality_level": r.reality_level
+            "reality_level": r.reality_level,
         }
         for r in results
     ]

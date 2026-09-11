@@ -3,7 +3,31 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
 from smos.core.database import Base
-from pgvector.sqlalchemy import Vector
+import os
+if os.getenv("DATABASE_URL", "").startswith("sqlite"):
+    import json
+    from sqlalchemy import TypeDecorator, Text
+
+    class Vector(TypeDecorator):
+        """SQLite-compatible Vector: stores list as JSON text."""
+        impl = Text
+        cache_ok = True
+
+        def __init__(self, dim=None):
+            self.dim = dim
+            super().__init__()
+
+        def process_bind_param(self, value, dialect):
+            if value is None:
+                return None
+            return json.dumps(list(value))
+
+        def process_result_value(self, value, dialect):
+            if value is None:
+                return None
+            return json.loads(value)
+else:
+    from pgvector.sqlalchemy import Vector
 
 class UserRole(str, enum.Enum):
     OWNER = "Owner"

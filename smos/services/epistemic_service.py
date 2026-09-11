@@ -32,4 +32,4 @@ class EpistemicService:
         return node
 
     def get_beyond_consensus_nodes(self):
-        return self.db.query(MemoryNode).filter(MemoryNode.epistemic_status == "BEYOND_CONSENSUS").all()
+        return self.db.query(MemoryNode).filter(MemoryNode.epistemic_status == "Beyond All Consensus").all()
